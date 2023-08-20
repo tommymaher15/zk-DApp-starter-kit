@@ -1,11 +1,35 @@
-import type { NextPage } from 'next';
+import { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
-
+import styles from '../styles/styles.module.css';
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import React, { useState, FormEvent } from 'react';
 
-const Home: NextPage = () => {
+interface HomeProps {}
+
+const Home: NextPage<HomeProps> = () => {
+  const [claimedBalance, setClaimedBalance] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // TODO: Implement ZKP logic here
+
+      // Simulate a delay for demonstration purposes
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Display verification result
+      alert('Token balance proof verified successfully!');
+    } catch (error) {
+      console.error(error);
+      alert('Token balance proof verification failed.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -15,9 +39,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-       Token Balance Checker 
-        </h1>
+
 
         <div
           style={{
@@ -27,21 +49,35 @@ const Home: NextPage = () => {
             justifyContent: "center"
           }}
         >
+          <form onSubmit={handleSubmit}>
+            <label>
+              Claimed Token Balance:
+              <input
+                type="number"
+                value={claimedBalance}
+                onChange={(e) => setClaimedBalance(e.target.value)}
+                required
+              />
+            </label>
+            <br />
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Verifying...' : 'Verify'}
+            </button>
+            
           <ConnectButton />
+          </form>
         </div>
 
-
-
         <div className={styles.grid}>
-         
+          {/* You can add more content here if needed */}
         </div>
       </main>
 
       <footer className={styles.footer}>
-        
+        {/* Footer content */}
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
